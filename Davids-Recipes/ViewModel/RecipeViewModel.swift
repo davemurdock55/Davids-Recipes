@@ -16,12 +16,13 @@ class RecipeViewModel {
     // MARK: - Properties
     init(_ modelContext: ModelContext) {
         self.modelContext = modelContext
-//        fetchData()
+        fetchData()
     }
 
     // MARK: - Model access
     private(set) var recipes: [Recipe] = []
     
+    // MARK: - User Intents
     func addRecipe() {
         withAnimation {
             let newRecipe = Recipe(
@@ -37,6 +38,7 @@ class RecipeViewModel {
             )
             
             modelContext.insert(newRecipe)
+            fetchData()
         }
     }
 
@@ -45,6 +47,20 @@ class RecipeViewModel {
             for index in offsets {
                 modelContext.delete(recipes[index])
             }
+            fetchData()
+        }
+    }
+    
+    // MARK: - Helpers
+    private func fetchData() {
+        try? modelContext.save() // this is to cover for a SwiftData bug I've seen
+        
+        do {
+            let descriptor = FetchDescriptor<Recipe>(sortBy: [SortDescriptor(\.title)])
+            
+            recipes = try modelContext.fetch(descriptor)
+        } catch {
+            print("Failed to Load Recipes")
         }
     }
     
