@@ -9,9 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
+//    @Environment(\.modelContext) private var modelContext
     @Environment(RecipeViewModel.self) private var viewModel
-//    @Query private var recipes: [Recipe]
+    @State private var selectedCategory: String?
+    @State private var selectedRecipe: Recipe?
+    @State private var showAddRecipeSheet: Bool = false
     
     private var allCategories: [String] {
         var categoriesSet = Set<String>()
@@ -21,85 +23,82 @@ struct ContentView: View {
                 categoriesSet.insert(category)
             }
         }
-        
+
         return Array(categoriesSet)
     }
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                if allCategories.count > 0 {
-                    ForEach(allCategories, id: \.self) { category in
-                        NavigationLink {
-                            Text(category)
-                        } label: {
-                            Text(category)
+        if allCategories.count > 0 {
+            NavigationSplitView {
+                List(selection: $selectedCategory) {
+                        ForEach(allCategories, id: \.self) { category in
+                            NavigationLink(value: category) {
+                                Text(category)
+                            }
                         }
-                    }
-                } else {
-                    Button(action: viewModel.addRecipe) {
-                        Label("Add Recipe", systemImage: "plus")
-                    }
                 }
-            }
-        } content: {
-                List {
-                    ForEach(viewModel.recipes) { recipe in
-                        NavigationLink {
-                            Text("\(recipe.title) at \(recipe.lastModified, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                        } label: {
-                            Text(recipe.title)
+            } content: {
+                List(selection: $selectedRecipe) {
+                        ForEach(viewModel.recipes.filter({ $0.categories.contains(selectedCategory ?? "") })) { recipe in
+                            NavigationLink(value: recipe) {
+                                Text("\(recipe.title) at \(recipe.lastModified, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                            }
                         }
+                        .onDelete(perform: viewModel.deleteRecipes)
                     }
-                    .onDelete(perform: viewModel.deleteRecipes)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                .navigationBarItems(
+                    trailing: HStack {
                         EditButton()
-                    }
-                    ToolbarItem {
-                        Button(action: viewModel.addRecipe) {
+                        Button(action: { showAddRecipeSheet = true }) {
                             Label("Add Recipe", systemImage: "plus")
                         }
+                        .sheet(isPresented: $showAddRecipeSheet) {
+                            RecipeSheetView()
+                        }
                     }
-                }
+                )
             } detail: {
-                Text("Select a recipe")
+                if let recipe = selectedRecipe {
+                    VStack{
+                        Text("\(recipe.title)").font(.title)
+                        Text("\(recipe.author)").font(.subheadline)
+                        Text("\(recipe.lastModified)")
+                    }
+                } else {
+                    Text("Select a recipe")
+                }
             }
-        }
+        } else {
+           VStack(alignment: .center) {
+               Text("Welcome to David's Recipe App!")
+                   .font(.title)
+                   .multilineTextAlignment(.center)
+               Button(action: { showAddRecipeSheet = true }) {
+                   Label("Add Your First Recipe", systemImage: "plus")
+               }
+               .padding()
+               .foregroundStyle(.white)
+               .background(.accent)
+               .cornerRadius(10)
+               .sheet(isPresented: $showAddRecipeSheet) {
+                   RecipeSheetView()
+               }
+           }
+           .padding(5)
+       }
+    }
     
-//    private func addRecipe() {
-//        withAnimation {
-//            let newRecipe = Recipe(
-//                title: "TestRecipe",
-//                author: "David Murdock",
-//                recipeQuote: "Quote",
-//                categories: ["Breakfast", "Lunch"],
-//                ingredients: "Ingredient 1, Ingredient 2",
-//                instructions: "1. Start by opening the pop tart 2. Put it in the toaster 3. Eat",
-//                notes: "Make sure you take the pop tart out!!!",
-//                favorited: true,
-//                lastModified: Date()
-//            )
-//            
-//            modelContext.insert(newRecipe)
-//        }
-//    }
-//
-//    private func deleteRecipes(offsets: IndexSet) {
-//        withAnimation {
-//            for index in offsets {
-//                modelContext.delete(recipes[index])
-//            }
-//        }
-//    }
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Recipe.self)
-    let viewModel = RecipeViewModel(container.mainContext)
-    
-    ContentView()
-        .modelContainer(container)
-        .environment(viewModel)
+    do {
+        let container = try ModelContainer(for: Recipe.self)
+        let viewModel = RecipeViewModel(container.mainContext)
+        
+        return ContentView()
+            .modelContainer(container)
+            .environment(viewModel)
+    } catch {
+        fatalError("Failed to create preview: \(error.localizedDescription)")
+    }
 }

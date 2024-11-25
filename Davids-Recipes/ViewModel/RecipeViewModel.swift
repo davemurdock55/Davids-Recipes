@@ -13,14 +13,16 @@ class RecipeViewModel {
     // MARK: - Properties
     private var modelContext: ModelContext
     
-    // MARK: - Properties
+    // MARK: - Initialization
     init(_ modelContext: ModelContext) {
         self.modelContext = modelContext
+        // You can comment this out to start fresh with no data :)
         fetchData()
     }
 
     // MARK: - Model access
     private(set) var recipes: [Recipe] = []
+    private(set) var favorites: [Recipe] = []
     
     // MARK: - User Intents
     func addRecipe() {
@@ -53,7 +55,7 @@ class RecipeViewModel {
     
     // MARK: - Helpers
     private func fetchData() {
-        try? modelContext.save() // this is to cover for a SwiftData bug I've seen
+        try? modelContext.save() // this is to cover for a SwiftData bug Prof Liddle has seen
         
         do {
             let descriptor = FetchDescriptor<Recipe>(sortBy: [SortDescriptor(\.title)])
@@ -61,6 +63,19 @@ class RecipeViewModel {
             recipes = try modelContext.fetch(descriptor)
         } catch {
             print("Failed to Load Recipes")
+        }
+    }
+    
+    private func fetchFavorites() {
+        do {
+            let descriptor = FetchDescriptor<Recipe>(
+                predicate: #Predicate { $0.favorited },
+                sortBy: [SortDescriptor(\.title)]
+            )
+            
+            favorites = try modelContext.fetch(descriptor)
+        } catch {
+            print("Failed to load favorites")
         }
     }
     
