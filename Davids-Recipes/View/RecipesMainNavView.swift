@@ -10,9 +10,10 @@ import SwiftData
 
 struct RecipesMainNavView: View {
     @Environment(RecipeViewModel.self) private var viewModel
-    @State private var selectedCategory: String?
+    @State private var filterText: String?
     @State private var selectedRecipe: Recipe?
     @State private var showAddRecipeSheet: Bool = false
+    @State private var searchText: String = ""
     
     private var allCategories: [String] {
         var categoriesSet = Set<String>()
@@ -23,17 +24,26 @@ struct RecipesMainNavView: View {
             }
         }
 
-        return Array(categoriesSet)
+        return Array(categoriesSet).sorted()
+    }
+    
+    private var displayRecipes: [Recipe] {
+        var filteredRecipes = viewModel.filterRecipes(by: filterText ?? Constants.allRecipes)
+        
+        if !searchText.isEmpty {
+            filteredRecipes = filteredRecipes.filter({ $0.ingredients.localizedCaseInsensitiveContains(searchText) })
+        }
+        
+        return filteredRecipes
     }
 
     var body: some View {
         if allCategories.count > 0 {
             NavigationSplitView {
-                List(selection: $selectedCategory) {
+                List(selection: $filterText) {
                     Section {
-                        // TODO: - Do something else when you click on All Recipes and Favorites (vs a category)
-                        NavigationLink(value: "All Recipes") {
-                            Label("All Recipes", systemImage: "list.bullet.rectangle")
+                        NavigationLink(value: Constants.allRecipes) {
+                            Label(Constants.allRecipes, systemImage: "list.bullet.rectangle")
                         }
                         NavigationLink(value: "Favorites") {
                             Label("Favorites", systemImage: "heart")
@@ -54,20 +64,17 @@ struct RecipesMainNavView: View {
                 }
                 .navigationTitle("David's Recipes")
             } content: {
-                // TODO: - Sort this list in alphabetical order (breakfast first, etc.)
-                // -- Bonus points for if there's a way we can organize it by Breakfast, Lunch, then Dinner, then Dessert, then Other in the sorting, and have everything else come before "Other"
-                
-                // TODO: - Get the favorites to actually show up in favorites
-                // we'll probably just need to move this filtering logic over to the ViewModel and handle it all there
                 List(selection: $selectedRecipe) {
-                    ForEach(viewModel.recipes.filter({ $0.categories.contains(selectedCategory ?? "") })) { recipe in
+                    ForEach(
+                        displayRecipes
+                    ) { recipe in
                         NavigationLink(value: recipe) {
                             Text("\(recipe.title)")
                         }
                     }
                     .onDelete(perform: viewModel.deleteRecipes)
                 }
-                .navigationTitle("\(selectedCategory ?? "")")
+                .navigationTitle("\(filterText ?? "")")
                 .navigationBarItems(
                     trailing: HStack {
                         EditButton()
@@ -78,6 +85,11 @@ struct RecipesMainNavView: View {
                             RecipeSheetView()
                         }
                     }
+                )
+                .searchable(
+                    text: $searchText,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: "Search Ingredients"
                 )
             } detail: {
                 if let recipe = selectedRecipe {
@@ -108,6 +120,10 @@ struct RecipesMainNavView: View {
        }
     }
     
+}
+
+private struct Constants {
+    static fileprivate let allRecipes: String = "All Recipes"
 }
 
 #Preview {

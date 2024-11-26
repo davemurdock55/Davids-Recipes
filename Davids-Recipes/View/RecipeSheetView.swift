@@ -22,30 +22,14 @@ struct RecipeSheetView: View {
     @State private var recipeInstructions: String = ""
     @State private var recipeNotes: String = ""
     
-    private var newRecipe: Recipe {
-        Recipe(
-            title: recipeTitle,
-            author: recipeAuthor,
-            recipeQuote: recipeQuote,
-            categories: recipeCategories,
-            ingredients: recipeIngredients,
-            instructions: recipeInstructions,
-            notes: recipeNotes,
-            favorited: favorited,
-            lastModified: Date()
-        )
-    }
-    
     var body: some View {
             NavigationStack {
                 Form {
                     // Favorited (boolean)
-                    Toggle(isOn: $favorited) {
-                        Text("Favorite?")
-                            .font(.title3)
-                            .fontWeight(.medium)
-                    }
-                    .tint(.accent)
+                    ToggleInput(
+                        labelText: "Favorite?",
+                        isOn: $favorited
+                    )
                     
                     // Recipe Title (string)
                     TextInput(
@@ -110,7 +94,36 @@ struct RecipeSheetView: View {
                     ToolbarItem {
                         Button {
                             dismiss()
-                            viewModel.addRecipe(newRecipe)
+                            if let updatedRecipe = editingRecipe {
+                                // update updatedRecipe constant with editingRecipe's updated content
+                                // (don't worry, updatedRecipe keeps the same id as editingRecipe)
+                                updatedRecipe.title = recipeTitle
+                                updatedRecipe.author = recipeAuthor
+                                updatedRecipe.recipeQuote = recipeQuote
+                                updatedRecipe.categories = recipeCategories
+                                updatedRecipe.ingredients = recipeIngredients
+                                updatedRecipe.instructions = recipeInstructions
+                                updatedRecipe.notes = recipeNotes
+                                updatedRecipe.favorited = favorited
+                                updatedRecipe.lastModified = Date()
+                                
+                                viewModel.editRecipe(updatedRecipe)
+                            } else {
+                                // creating new recipe object
+                                let newRecipe = Recipe(
+                                    title: recipeTitle,
+                                    author: recipeAuthor,
+                                    recipeQuote: recipeQuote,
+                                    categories: recipeCategories,
+                                    ingredients: recipeIngredients,
+                                    instructions: recipeInstructions,
+                                    notes: recipeNotes,
+                                    favorited: favorited,
+                                    lastModified: Date()
+                                )
+                                viewModel.addRecipe(newRecipe)
+                            }
+                                
                         } label: {
                             Text("Save")
                         }
@@ -131,6 +144,5 @@ struct RecipeSheetView: View {
             }
         
     }
-    
     
 }

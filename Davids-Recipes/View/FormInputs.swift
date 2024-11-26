@@ -7,6 +7,21 @@
 
 import SwiftUI
 
+struct ToggleInput: View {
+    var labelText: String
+    @Binding var isOn: Bool
+    
+    var body: some View {
+        Toggle(isOn: $isOn) {
+            Text(labelText)
+                .font(.title3)
+                .fontWeight(.medium)
+        }
+        .tint(.accent)
+        .padding(.vertical, Constants.formInputPadding)
+    }
+}
+
 struct TextInput: View {
     var labelText: String
     @Binding var value: String
@@ -20,6 +35,7 @@ struct TextInput: View {
                 .background(Constants.formInputBackground)
                 .cornerRadius(Constants.formInputCornerRadius)
         }
+        .padding(.vertical, Constants.formInputPadding)
     }
 }
 
@@ -34,6 +50,7 @@ struct MultiLineTextInput: View {
             Text(labelText).font(Constants.formLabelFontSize).fontWeight(Constants.formLabelFontWeight)
             ZStack(alignment: .topLeading) {
                 TextEditor(text: $value)
+                    .frame(height: Constants.multiLineInputHeight)
                     .padding(Constants.formInputPadding)
                     .background(Constants.formInputBackground)
                     .cornerRadius(Constants.formInputCornerRadius)
@@ -73,7 +90,7 @@ struct ListInput: View {
                         Image(systemName: "trash")
                     }
                     .buttonStyle(.borderless)
-                    .padding()
+                    .padding(Constants.lineInputButtonPadding)
                     .cornerRadius(Constants.formInputCornerRadius)
                 }
             }
@@ -94,13 +111,14 @@ struct ListInput: View {
 
 // MARK: - Constants
 private struct Constants {
-    static let formLabelFontSize: Font = .title3
-    static let formLabelFontWeight: Font.Weight = .medium
-    static let formInputPadding: Double = 10.0
-    static let formInputBackground: Color = Color(.systemGray6)
-    static let formInputCornerRadius: Double = 10.0
-    static let multiLineInputHorizontalPadding: Double = 14.0
-    static let multiLineInputVerticalPadding: Double = 18.0
-    static let placeholderOpacity: Double = 0.5
-    static let lineInputButtonPadding: Double = 5.0
+    static fileprivate let formLabelFontSize: Font = .title3
+    static fileprivate let formLabelFontWeight: Font.Weight = .medium
+    static fileprivate let formInputPadding: Double = 10.0
+    static fileprivate let formInputBackground: Color = Color(.systemGray6)
+    static fileprivate let formInputCornerRadius: Double = 10.0
+    static fileprivate let multiLineInputHeight: Double = 100.0
+    static fileprivate let multiLineInputHorizontalPadding: Double = 14.0
+    static fileprivate let multiLineInputVerticalPadding: Double = 18.0
+    static fileprivate let placeholderOpacity: Double = 0.5
+    static fileprivate let lineInputButtonPadding: Double = 5.0
 }
