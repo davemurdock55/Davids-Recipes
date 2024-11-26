@@ -25,25 +25,21 @@ class RecipeViewModel {
     private(set) var favorites: [Recipe] = []
     
     // MARK: - User Intents
-    func addRecipe() {
+    func addRecipe(_ newRecipe: Recipe) {
         withAnimation {
-            let newRecipe = Recipe(
-                title: "TestRecipe",
-                author: "David Murdock",
-                recipeQuote: "Quote",
-                categories: ["Breakfast", "Lunch"],
-                ingredients: "Ingredient 1, Ingredient 2",
-                instructions: "1. Start by opening the pop tart 2. Put it in the toaster 3. Eat",
-                notes: "Make sure you take the pop tart out!!!",
-                favorited: true,
-                lastModified: Date()
-            )
-            
             modelContext.insert(newRecipe)
             fetchData()
         }
     }
 
+    func toggleFavorite(for recipe: Recipe) {
+        withAnimation {
+            recipe.favorited.toggle()
+            try? modelContext.save()
+            fetchData()
+        }
+    }
+    
     func deleteRecipes(offsets: IndexSet) {
         withAnimation {
             for index in offsets {

@@ -11,7 +11,7 @@ struct RecipeSheetView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(RecipeViewModel.self) private var viewModel
     
-    private var editingRecipe: Recipe?
+    var editingRecipe: Recipe?
     
     @State private var favorited: Bool = false
     @State private var recipeTitle: String = ""
@@ -21,6 +21,20 @@ struct RecipeSheetView: View {
     @State private var recipeIngredients: String = ""
     @State private var recipeInstructions: String = ""
     @State private var recipeNotes: String = ""
+    
+    private var newRecipe: Recipe {
+        Recipe(
+            title: recipeTitle,
+            author: recipeAuthor,
+            recipeQuote: recipeQuote,
+            categories: recipeCategories,
+            ingredients: recipeIngredients,
+            instructions: recipeInstructions,
+            notes: recipeNotes,
+            favorited: favorited,
+            lastModified: Date()
+        )
+    }
     
     var body: some View {
             NavigationStack {
@@ -86,7 +100,7 @@ struct RecipeSheetView: View {
                     
                 }
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Add Recipe")
+                .navigationTitle("\(editingRecipe != nil ? "Edit \(editingRecipe?.title ?? "Recipe")" : "Add Recipe")")
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         Button(action: { dismiss() }) {
@@ -94,10 +108,12 @@ struct RecipeSheetView: View {
                         }
                     }
                     ToolbarItem {
-                        Button(action: { dismiss() }) {
+                        Button {
+                            dismiss()
+                            viewModel.addRecipe(newRecipe)
+                        } label: {
                             Text("Save")
                         }
-//                        .disabled(recipeCategories.isEmpty)
                     }
                 }
                 .onAppear {
@@ -112,11 +128,6 @@ struct RecipeSheetView: View {
                         recipeNotes = recipe.notes
                     }
                 }
-//                .onChange(of: recipeCategories) {
-//                    if recipeCategories.isEmpty {
-//                        recipeCategories.append("Other")
-//                    }
-//                }
             }
         
     }

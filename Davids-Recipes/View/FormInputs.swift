@@ -60,10 +60,6 @@ struct ListInput: View {
             Text(labelText)
                 .font(Constants.formLabelFontSize)
                 .fontWeight(Constants.formLabelFontWeight)
-            
-//            if stringArray.isEmpty {
-//                Text("* Required").foregroundStyle(.red)
-//            }
 
             ForEach($stringArray.indices, id: \.self) { index in
                 HStack {

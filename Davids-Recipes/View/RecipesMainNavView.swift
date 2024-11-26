@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct RecipesMainNavView: View {
-//    @Environment(\.modelContext) private var modelContext
     @Environment(RecipeViewModel.self) private var viewModel
     @State private var selectedCategory: String?
     @State private var selectedRecipe: Recipe?
@@ -31,21 +30,44 @@ struct RecipesMainNavView: View {
         if allCategories.count > 0 {
             NavigationSplitView {
                 List(selection: $selectedCategory) {
+                    Section {
+                        // TODO: - Do something else when you click on All Recipes and Favorites (vs a category)
+                        NavigationLink(value: "All Recipes") {
+                            Label("All Recipes", systemImage: "list.bullet.rectangle")
+                        }
+                        NavigationLink(value: "Favorites") {
+                            Label("Favorites", systemImage: "heart")
+                        }
+                    } header: {
+                        Text("Main")
+                    }
+                    
+                    Section {
                         ForEach(allCategories, id: \.self) { category in
                             NavigationLink(value: category) {
                                 Text(category)
                             }
                         }
-                }
-            } content: {
-                List(selection: $selectedRecipe) {
-                        ForEach(viewModel.recipes.filter({ $0.categories.contains(selectedCategory ?? "") })) { recipe in
-                            NavigationLink(value: recipe) {
-                                Text("\(recipe.title) at \(recipe.lastModified, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                            }
-                        }
-                        .onDelete(perform: viewModel.deleteRecipes)
+                    } header: {
+                        Text("Categories")
                     }
+                }
+                .navigationTitle("David's Recipes")
+            } content: {
+                // TODO: - Sort this list in alphabetical order (breakfast first, etc.)
+                // -- Bonus points for if there's a way we can organize it by Breakfast, Lunch, then Dinner, then Dessert, then Other in the sorting, and have everything else come before "Other"
+                
+                // TODO: - Get the favorites to actually show up in favorites
+                // we'll probably just need to move this filtering logic over to the ViewModel and handle it all there
+                List(selection: $selectedRecipe) {
+                    ForEach(viewModel.recipes.filter({ $0.categories.contains(selectedCategory ?? "") })) { recipe in
+                        NavigationLink(value: recipe) {
+                            Text("\(recipe.title)")
+                        }
+                    }
+                    .onDelete(perform: viewModel.deleteRecipes)
+                }
+                .navigationTitle("\(selectedCategory ?? "")")
                 .navigationBarItems(
                     trailing: HStack {
                         EditButton()
@@ -69,7 +91,9 @@ struct RecipesMainNavView: View {
                Text("Welcome to David's Recipe App!")
                    .font(.title)
                    .multilineTextAlignment(.center)
-               Button(action: { showAddRecipeSheet = true }) {
+               Button {
+                   showAddRecipeSheet = true
+               } label: {
                    Label("Add Your First Recipe", systemImage: "plus")
                }
                .padding()
