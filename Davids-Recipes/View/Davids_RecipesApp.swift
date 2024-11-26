@@ -15,7 +15,7 @@ struct Davids_RecipesApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RecipesMainNavView()
         }
         .modelContainer(container)
         .environment(viewModel) // this is environment, NOT @EnvironmentObject like what we did to pass the ViewModel around

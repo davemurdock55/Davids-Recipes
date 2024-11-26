@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  RecipesMainNavView.swift
 //  Davids-Recipes
 //
 //  Created by David Murdock on 11/21/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct RecipesMainNavView: View {
 //    @Environment(\.modelContext) private var modelContext
     @Environment(RecipeViewModel.self) private var viewModel
     @State private var selectedCategory: String?
@@ -59,11 +59,7 @@ struct ContentView: View {
                 )
             } detail: {
                 if let recipe = selectedRecipe {
-                    VStack{
-                        Text("\(recipe.title)").font(.title)
-                        Text("\(recipe.author)").font(.subheadline)
-                        Text("\(recipe.lastModified)")
-                    }
+                    RecipeView(recipe: recipe)
                 } else {
                     Text("Select a recipe")
                 }
@@ -95,7 +91,7 @@ struct ContentView: View {
         let container = try ModelContainer(for: Recipe.self)
         let viewModel = RecipeViewModel(container.mainContext)
         
-        return ContentView()
+        return RecipesMainNavView()
             .modelContainer(container)
             .environment(viewModel)
     } catch {

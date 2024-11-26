@@ -25,7 +25,7 @@ struct RecipeSheetView: View {
     var body: some View {
             NavigationStack {
                 Form {
-                    
+                    // Favorited (boolean)
                     Toggle(isOn: $favorited) {
                         Text("Favorite?")
                             .font(.title3)
@@ -53,7 +53,6 @@ struct RecipeSheetView: View {
                     )
 
                     // Categories (required) (multi-add like tags or list input of some kind???)
-//                    TagInputView(labelText: "Categories", tags: $recipeCategories)
                     ListInput(labelText: "Categories", stringArray: $recipeCategories)
                     
                     // Ingredients (markdown long-string or multi-add)
@@ -98,6 +97,7 @@ struct RecipeSheetView: View {
                         Button(action: { dismiss() }) {
                             Text("Save")
                         }
+//                        .disabled(recipeCategories.isEmpty)
                     }
                 }
                 .onAppear {
@@ -112,7 +112,14 @@ struct RecipeSheetView: View {
                         recipeNotes = recipe.notes
                     }
                 }
+//                .onChange(of: recipeCategories) {
+//                    if recipeCategories.isEmpty {
+//                        recipeCategories.append("Other")
+//                    }
+//                }
             }
         
     }
+    
+    
 }
