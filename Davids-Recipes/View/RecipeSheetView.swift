@@ -113,7 +113,7 @@ struct RecipeSheetView: View {
                                 updatedRecipe.imageUrl = recipeImageUrl
                                 updatedRecipe.author = recipeAuthor
                                 updatedRecipe.quote = recipeQuote
-                                updatedRecipe.categories = recipeCategories
+                                updatedRecipe.categories = recipeCategories.map { $0.capitalized }
                                 updatedRecipe.ingredients = recipeIngredients
                                 updatedRecipe.instructions = recipeInstructions
                                 updatedRecipe.notes = recipeNotes
@@ -128,7 +128,7 @@ struct RecipeSheetView: View {
                                     imageUrl: recipeImageUrl,
                                     author: recipeAuthor,
                                     quote: recipeQuote,
-                                    categories: recipeCategories,
+                                    categories: recipeCategories.map { $0.capitalized },
                                     ingredients: recipeIngredients,
                                     instructions: recipeInstructions,
                                     notes: recipeNotes,

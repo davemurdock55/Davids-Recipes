@@ -22,27 +22,16 @@ class RecipeViewModel {
     // MARK: - Model access
     private(set) var recipes: [Recipe] = []
     private(set) var favorites: [Recipe] = []
+    private(set) var categories: [String] = []
     var imageData: Data?
-//    private(set) var categories: [Recipe] = []
     
-//    func recipes(for category: String) -> [Recipe] {
-//        return recipes.filter{
-//            $0.categories.contains(category)
-//        }
-//    }
-
-    // MARK: - User Intents
-    func filterRecipes(by filterText: String) -> [Recipe] {
-        switch filterText {
-            case "All Recipes":
-                return recipes
-            case "Favorites":
-                return favorites
-            default:
-                return recipes.filter { $0.categories.contains(filterText) }
+    func recipes(for category: String) -> [Recipe] {
+        return recipes.filter{
+            $0.categories.contains(category)
         }
     }
 
+    // MARK: - User Intents
     func addRecipe(_ newRecipe: Recipe) {
         withAnimation {
             modelContext.insert(newRecipe)
@@ -75,19 +64,6 @@ class RecipeViewModel {
         }
     }
     
-    // AI helped me switch from using an Async Image by giving me this code (since I found out that apparently AsyncImage is very buggy after doing some research)
-    func loadImage(for recipe: Recipe) {
-        guard let url = URL(string: recipe.imageUrl) else { return }
-        
-        // Perform a URLSession request to fetch the image and reset cache
-        URLSession.shared.dataTask(with: url) { data, _, _ in
-            guard let data = data else { return }
-            DispatchQueue.main.async {
-                self.imageData = data
-            }
-        }.resume()
-    }
-    
     
     // MARK: - Private Helpers
     private func fetchData() {
@@ -95,7 +71,7 @@ class RecipeViewModel {
 
         fetchAllRecipes()
         fetchFavorites()
-//        fetchAllCategories()
+        setCategories()
         
         if recipes.isEmpty {
             sampleRecipes.forEach { modelContext.insert($0) }
@@ -129,5 +105,17 @@ class RecipeViewModel {
         } catch {
             print("Failed to load favorites")
         }
+    }
+    
+    private func setCategories() {
+        var categoriesSet = Set<String>()
+        
+        recipes.forEach { recipe in
+            recipe.categories.forEach { category in
+                categoriesSet.insert(category)
+            }
+        }
+
+        categories = Array(categoriesSet).sorted()
     }
 }

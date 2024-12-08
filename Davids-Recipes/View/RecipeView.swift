@@ -17,18 +17,17 @@ struct RecipeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                
-                // AI helped me switch from using an Async Image by giving me this code (since I found out that apparently AsyncImage is very buggy after doing some research)
-                if let imageData = viewModel.imageData, let uiImage = UIImage(data: imageData) {
-                    Image(uiImage: uiImage)
+                AsyncImage(url: URL(string: recipe.imageUrl)) { image in
+                    image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(height: Constants.imageFrameHeight)
                         .clipped()
-                } else {
+                } placeholder: {
                     ProgressView()
                         .frame(height: Constants.imageFrameHeight)
                 }
+                .padding(.vertical, Constants.standardPadding)
 
 //                Text("\(recipe.title)").font(.title).fontWeight(.bold)
 //                    .padding(.vertical, Constants.standardPadding)
@@ -83,13 +82,6 @@ struct RecipeView: View {
                     .frame(width: Constants.notesWidth)
                     .padding(.bottom, Constants.standardPadding)
             }
-        }
-        .onAppear {
-            // AI helped advise me to re-load the image whenever the View re-appears
-            viewModel.loadImage(for: recipe)
-        }
-        .onChange(of: showEditRecipeSheet) {
-            viewModel.loadImage(for: recipe)
         }
         .navigationTitle("\(recipe.title)")
         .toolbar {

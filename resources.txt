@@ -1,0 +1,26 @@
+These are all the resources I referenced (even if only a little) in creating this app
+
+https://swiftwithmajid.com/2022/10/18/mastering-navigationsplitview-in-swiftui/
+
+https://www.hackingwithswift.com/quick-start/swiftui/how-to-present-a-new-view-using-sheets
+
+https://www.google.com/search?q=how+to+remove+bottom+line+of+textfield+in+swift&sca_esv=2fbbe89798343657&sxsrf=ADLYWIIlCSCZxiXrjoEoK4QYPkOhHeeLXQ%3A1732581849527&ei=2RlFZ6DwH8Gtur8PwqOOkQ4&ved=0ahUKEwjgwL2t4viJAxXBlu4BHcKRI-IQ4dUDCA8&uact=5&oq=how+to+remove+bottom+line+of+textfield+in+swift&gs_lp=Egxnd3Mtd2l6LXNlcnAiL2hvdyB0byByZW1vdmUgYm90dG9tIGxpbmUgb2YgdGV4dGZpZWxkIGluIHN3aWZ0MggQIRigARjDBEjCCVD7BVjiB3ACeACQAQCYAV-gAfkCqgEBNbgBA8gBAPgBAZgCBKACrwHCAgoQABiwAxjWBBhHwgIKECEYoAEYwwQYCpgDAIgGAZAGBJIHATSgB_AV&sclient=gws-wiz-serp
+
+https://stackoverflow.com/questions/65985638/remove-separator-line-from-form-in-swiftui
+
+
+https://sarunw.com/posts/swiftui-list-section-header-footer/
+
+https://www.hackingwithswift.com/read/0/10/switch-case
+
+https://www.hackingwithswift.com/forums/swiftui/sorting-an-array-either-before-a-foreach-or-with-a-foreach/15185
+
+https://developer.apple.com/documentation/swiftdata/maintaining-a-local-copy-of-server-data?changes=la
+
+https://www.hackingwithswift.com/quick-start/swiftdata/how-to-pre-populate-an-app-with-an-existing-swiftdata-database
+
+https://swiftpackageindex.com/gonzalezreal/swift-markdown-ui/main/documentation/markdownui/softbreak
+
+https://www.hackingwithswift.com/quick-start/swiftui/how-to-load-a-remote-image-from-a-url
+
+https://matteomanferdini.com/swiftui-asyncimage/#download-image-caching

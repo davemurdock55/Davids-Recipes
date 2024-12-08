@@ -10,48 +10,35 @@ import SwiftData
 
 struct RecipesMainNavView: View {
     @Environment(RecipeViewModel.self) private var viewModel
-    @State private var filterText: String?
     @State private var selectedRecipe: Recipe?
-    @State private var showAddRecipeSheet: Bool = false
     @State private var searchText: String = ""
+    @State private var showAddRecipeSheet: Bool = false
     
-    private var allCategories: [String] {
-        var categoriesSet = Set<String>()
-        
-        viewModel.recipes.forEach { recipe in
-            recipe.categories.forEach { category in
-                categoriesSet.insert(category)
-            }
-        }
-
-        return Array(categoriesSet).sorted()
-    }
-    
-    private var displayRecipes: [Recipe] {
-        var filteredRecipes = viewModel.filterRecipes(by: filterText ?? "All Recipes")
-        
-        if !searchText.isEmpty {
-            filteredRecipes = filteredRecipes.filter({ $0.ingredients.localizedCaseInsensitiveContains(searchText) })
-        }
-        
-        return filteredRecipes
-    }
-
     var body: some View {
-        if allCategories.count > 0 {
+        if viewModel.recipes.count > 0 {
             NavigationSplitView {
-                List(selection: $filterText) {
+                List {
                     Section {
                         NavigationLink(
-                            value: "All Recipes"
-//                            destination: recipeList(
-//                                for: viewModel.recipes,
-//                                with: "All Recipes"
-//                            )
+                            destination: RecipeListView(
+                                recipes: viewModel.recipes,
+                                title: "All Recipes",
+                                searchText: $searchText,
+                                showAddRecipeSheet: $showAddRecipeSheet,
+                                selectedRecipe: $selectedRecipe
+                            )
                         ) {
                             Label("All Recipes", systemImage: "list.bullet.rectangle")
                         }
-                        NavigationLink(value: "Favorites") {
+                        NavigationLink(
+                            destination: RecipeListView(
+                                recipes: viewModel.favorites,
+                                title: "Favorites",
+                                searchText: $searchText,
+                                showAddRecipeSheet: $showAddRecipeSheet,
+                                selectedRecipe: $selectedRecipe
+                            )
+                        ) {
                             Label("Favorites", systemImage: "heart")
                         }
                     } header: {
@@ -59,8 +46,16 @@ struct RecipesMainNavView: View {
                     }
                     
                     Section {
-                        ForEach(allCategories, id: \.self) { category in
-                            NavigationLink(value: category) {
+                        ForEach(viewModel.categories, id: \.self) { category in
+                            NavigationLink(
+                                destination: RecipeListView(
+                                    recipes: viewModel.recipes(for: category),
+                                    title: category,
+                                    searchText: $searchText,
+                                    showAddRecipeSheet: $showAddRecipeSheet,
+                                    selectedRecipe: $selectedRecipe
+                                )
+                            ) {
                                 Text(category)
                             }
                         }
@@ -70,103 +65,77 @@ struct RecipesMainNavView: View {
                 }
                 .navigationTitle("David's Recipes")
             } content: {
-                List(selection: $selectedRecipe) {
-                    ForEach(
-                        displayRecipes
-                    ) { recipe in
-                        NavigationLink(value: recipe) {
-                            Text("\(recipe.title)")
-                        }
-                    }
-                    .onDelete(perform: viewModel.deleteRecipes)
-                }
-                .navigationTitle("\(filterText ?? "")")
-                .navigationBarItems(
-                    trailing: HStack {
-                        EditButton()
-                        Button(action: { showAddRecipeSheet = true }) {
-                            Label("Add Recipe", systemImage: "plus")
-                        }
-                        .sheet(isPresented: $showAddRecipeSheet) {
-                            RecipeSheetView()
-                        }
-                    }
-                )
-                .searchable(
-                    text: $searchText,
-                    placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: "Search Ingredients"
+                RecipeListView(
+                    recipes: viewModel.recipes,
+                    title: "All Recipes",
+                    searchText: $searchText,
+                    showAddRecipeSheet: $showAddRecipeSheet,
+                    selectedRecipe: $selectedRecipe
                 )
             } detail: {
                 if let recipe = selectedRecipe {
                     RecipeView(recipe: recipe)
                 } else {
-                    VStack(alignment: .center) {
-                        Text("Welcome to David's Recipe App!")
-                            .font(.title)
-                            .multilineTextAlignment(.center)
-                        Text("Please Select a recipe or add a new one to get started")
-                        Button {
-                            showAddRecipeSheet = true
-                        } label: {
-                            Label("Add a Recipe", systemImage: "plus")
-                        }
-                        .padding()
-                        .foregroundStyle(.white)
-                        .background(.accent)
-                        .cornerRadius(Constants.buttonCornerRadius)
-                        .sheet(isPresented: $showAddRecipeSheet) {
-                            RecipeSheetView()
-                        }
-                    }
-                    .padding(Constants.bottomPadding)
+                    EmptyRecipeView(showAddRecipeSheet: $showAddRecipeSheet, noRecipesAtAll: false)
                 }
             }
         } else {
-           VStack(alignment: .center) {
-               Text("Welcome to David's Recipe App!")
-                   .font(.title)
-                   .multilineTextAlignment(.center)
-               Button {
-                   showAddRecipeSheet = true
-               } label: {
-                   Label("Add Your First Recipe", systemImage: "plus")
-               }
-               .padding()
-               .foregroundStyle(.white)
-               .background(.accent)
-               .cornerRadius(Constants.buttonCornerRadius)
-               .sheet(isPresented: $showAddRecipeSheet) {
-                   RecipeSheetView()
-               }
-           }
-           .padding(Constants.bottomPadding)
+            EmptyRecipeView(showAddRecipeSheet: $showAddRecipeSheet, noRecipesAtAll: true)
        }
     }
     
-    
-//    You can do something like this to list recipes in both places
-//    private func recipeList(for recipes: [Recipe], with title: String) -> some View {
-//        List {
-//            ForEach(recipes) { recipe in
-//                NavigationLink(recipe.title, destination: RecipeView(recipe: recipe))
-//            }
-//        }
-//        .toolbar {
-//            ToolbarItem(placement: .navigationBarTrailing) {
-//                EditButton()
-//            }
-//            ToolbarItem {
-//                Button {
-//                    showAddRecipeSheet = true
-//                } label: {
-//                    Label("Add Item", systemImage: "plus")
-//                }
-//            }
-//        }
-//    }
-    
 }
+
+// MARK: - Helper View
+private struct RecipeListView: View {
+    let recipes: [Recipe]
+    let title: String
+    @Binding var searchText: String
+    @Binding var showAddRecipeSheet: Bool
+    @Environment(RecipeViewModel.self) private var viewModel
+    @Binding var selectedRecipe: Recipe?
+
+    var body: some View {
+        List {
+            ForEach(filter(recipes)) { recipe in
+                NavigationLink(
+                    recipe.title,
+                    destination: RecipeView(recipe: recipe),
+                    tag: recipe,
+                    selection: $selectedRecipe)
+            }
+            .onDelete(perform: viewModel.deleteRecipes)
+        }
+        .navigationTitle("\(title)")
+        .navigationBarItems(
+            trailing: HStack {
+                EditButton()
+                Button(action: { showAddRecipeSheet = true }) {
+                    Label("Add Recipe", systemImage: "plus")
+                }
+                .sheet(isPresented: $showAddRecipeSheet) {
+                    RecipeSheetView()
+                }
+            }
+        )
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: "Search Ingredients"
+        )
+    }
+
+    // MARK: - Helper Function
+    // Used the Claude snippet we were shown in class (and referenced ChatGPT a little in the creation of this function - mainly as a reminder that I could simply access searchText from outside of the helper)
+    private func filter(_ recipes: [Recipe]) -> [Recipe] {
+        if !searchText.isEmpty {
+            return recipes.filter({ $0.ingredients.localizedCaseInsensitiveContains(searchText) })
+        } else {
+            return recipes
+        }
+    }
+}
+
 
 // MARK: - Constants
 private struct Constants {
@@ -174,6 +143,8 @@ private struct Constants {
     static fileprivate let bottomPadding: Double = 5
 }
 
+
+// MARK: - Preview
 #Preview {
     do {
         let container = try ModelContainer(for: Recipe.self)
