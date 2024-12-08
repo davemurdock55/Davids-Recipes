@@ -17,6 +17,7 @@ class RecipeViewModel {
     init(_ modelContext: ModelContext) {
         self.modelContext = modelContext
         fetchData()
+        setCategories()
     }
 
     // MARK: - Model access
