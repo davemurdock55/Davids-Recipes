@@ -10,8 +10,13 @@ import Foundation
 let sampleRecipes = [
     Recipe(
         title: "Sweet Crepes",
+        imageUrl: "https://plus.unsplash.com/premium_photo-1707757442378-8cb5223916ae?q=80&w=2944&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         author: "David Murdock",
-        recipeQuote: "I love crepes",
+        quote: """
+        > I love crepes so much  
+        > They are so yummy to me  
+        > This is a haiku
+        """,
         categories: ["Breakfast", "Dessert"],
         ingredients: """
         |   Quantity    |   Description |   Notes   |
@@ -25,64 +30,7 @@ let sampleRecipes = [
         3. Eat them and enjoy
         """,
         notes: "This recipe is for sweet crepes and not savory ones",
-        favorited: true,
+        isFavorite: true,
         lastModified: Date()
     ),
-//    Recipe(
-//        title: <#T##String#>,
-//        author: <#T##String#>,
-//        recipeQuote: <#T##String#>,
-//        categories: <#T##[String]#>,
-//        ingredients: <#T##String#>,
-//        instructions: <#T##String#>,
-//        notes: <#T##String#>,
-//        favorited: <#T##Bool#>,
-//        lastModified: <#T##Date#>
-//    ),
-//    Recipe(
-//        title: <#T##String#>,
-//        author: <#T##String#>,
-//        recipeQuote: <#T##String#>,
-//        categories: <#T##[String]#>,
-//        ingredients: <#T##String#>,
-//        instructions: <#T##String#>,
-//        notes: <#T##String#>,
-//        favorited: <#T##Bool#>,
-//        lastModified: <#T##Date#>
-//    ),
-//    Recipe(
-//        title: <#T##String#>,
-//        author: <#T##String#>,
-//        recipeQuote: <#T##String#>,
-//        categories: <#T##[String]#>,
-//        ingredients: <#T##String#>,
-//        instructions: <#T##String#>,
-//        notes: <#T##String#>,
-//        favorited: <#T##Bool#>,
-//        lastModified: <#T##Date#>
-//    ),
-//    Recipe(
-//        title: <#T##String#>,
-//        author: <#T##String#>,
-//        recipeQuote: <#T##String#>,
-//        categories: <#T##[String]#>,
-//        ingredients: <#T##String#>,
-//        instructions: <#T##String#>,
-//        notes: <#T##String#>,
-//        favorited: <#T##Bool#>,
-//        lastModified: <#T##Date#>
-//    ),
-//    Recipe(
-//        title: <#T##String#>,
-//        author: <#T##String#>,
-//        recipeQuote: <#T##String#>,
-//        categories: <#T##[String]#>,
-//        ingredients: <#T##String#>,
-//        instructions: <#T##String#>,
-//        notes: <#T##String#>,
-//        favorited: <#T##Bool#>,
-//        lastModified: <#T##Date#>
-//    )
-    
-    
 ]

@@ -13,8 +13,9 @@ struct RecipeSheetView: View {
     
     var editingRecipe: Recipe?
     
-    @State private var favorited: Bool = false
+    @State private var recipeIsFavorite: Bool = false
     @State private var recipeTitle: String = ""
+    @State private var recipeImageUrl: String = ""
     @State private var recipeAuthor: String = ""
     @State private var recipeQuote: String = ""
     @State private var recipeCategories: [String] = []
@@ -28,26 +29,35 @@ struct RecipeSheetView: View {
                     // Favorited (boolean)
                     ToggleInput(
                         labelText: "Favorite?",
-                        isOn: $favorited
+                        isOn: $recipeIsFavorite
                     )
                     
                     // Recipe Title (string)
                     TextInput(
                         labelText: "Recipe Title",
                         value: $recipeTitle,
-                        placeholderText: "Recipe Title"
+                        placeholderText: "Chocolate Chip Cookies"
                     )
+                    
+                    // Recipe Title (string)
+                    TextInput(
+                        labelText: "Cover Image Url",
+                        value: $recipeImageUrl,
+                        placeholderText: "https://www.example.com/images/logo.png"
+                    )
+                    
                     // Recipe Author (string)
                     TextInput(
                         labelText: "Recipe Author",
                         value: $recipeAuthor,
-                        placeholderText: "Recipe Author"
+                        placeholderText: "Prof. Liddle"
                     )
+                    
                     // Recipe Quote (long-string)
                     MultiLineTextInput(
                         labelText: "Recipe Quote",
                         value: $recipeQuote,
-                        placeholderText: "Recipe Quote"
+                        placeholderText: "> I like this recipe app a lot"
                     )
 
                     // Categories (required) (multi-add like tags or list input of some kind???)
@@ -64,6 +74,7 @@ struct RecipeSheetView: View {
                                         |   1 pinch  |   Salt  |   Use two fingers  |
                                         """
                     )
+                    
                     // Instructions (markdown long-string or multi-add)
                     MultiLineTextInput(
                         labelText: "Instructions",
@@ -75,11 +86,12 @@ struct RecipeSheetView: View {
                                         4. Cook until light brown
                                         """
                     )
+                    
                     // notes (long-string)
                     MultiLineTextInput(
                         labelText: "Notes",
                         value: $recipeNotes,
-                        placeholderText: "Notes"
+                        placeholderText: "Here are some notes about the recipe"
                     )
                     
                 }
@@ -98,13 +110,14 @@ struct RecipeSheetView: View {
                                 // update updatedRecipe constant with editingRecipe's updated content
                                 // (don't worry, updatedRecipe keeps the same id as editingRecipe)
                                 updatedRecipe.title = recipeTitle
+                                updatedRecipe.imageUrl = recipeImageUrl
                                 updatedRecipe.author = recipeAuthor
-                                updatedRecipe.recipeQuote = recipeQuote
+                                updatedRecipe.quote = recipeQuote
                                 updatedRecipe.categories = recipeCategories
                                 updatedRecipe.ingredients = recipeIngredients
                                 updatedRecipe.instructions = recipeInstructions
                                 updatedRecipe.notes = recipeNotes
-                                updatedRecipe.favorited = favorited
+                                updatedRecipe.isFavorite = recipeIsFavorite
                                 updatedRecipe.lastModified = Date()
                                 
                                 viewModel.editRecipe(updatedRecipe)
@@ -112,13 +125,14 @@ struct RecipeSheetView: View {
                                 // creating new recipe object
                                 let newRecipe = Recipe(
                                     title: recipeTitle,
+                                    imageUrl: recipeImageUrl,
                                     author: recipeAuthor,
-                                    recipeQuote: recipeQuote,
+                                    quote: recipeQuote,
                                     categories: recipeCategories,
                                     ingredients: recipeIngredients,
                                     instructions: recipeInstructions,
                                     notes: recipeNotes,
-                                    favorited: favorited,
+                                    isFavorite: recipeIsFavorite,
                                     lastModified: Date()
                                 )
                                 viewModel.addRecipe(newRecipe)
@@ -126,15 +140,17 @@ struct RecipeSheetView: View {
                                 
                         } label: {
                             Text("Save")
+                                .fontWeight(.semibold)
                         }
                     }
                 }
                 .onAppear {
                     if let recipe = editingRecipe {
-                        favorited = recipe.favorited
+                        recipeIsFavorite = recipe.isFavorite
                         recipeTitle = recipe.title
+                        recipeImageUrl = recipe.imageUrl
                         recipeAuthor = recipe.author
-                        recipeQuote = recipe.recipeQuote
+                        recipeQuote = recipe.quote
                         recipeCategories = recipe.categories
                         recipeIngredients = recipe.ingredients
                         recipeInstructions = recipe.instructions

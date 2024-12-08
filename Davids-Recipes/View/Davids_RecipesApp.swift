@@ -18,14 +18,12 @@ struct Davids_RecipesApp: App {
             RecipesMainNavView()
         }
         .modelContainer(container)
-        .environment(viewModel) // this is environment, NOT @EnvironmentObject like what we did to pass the ViewModel around
+        .environment(viewModel)
     }
 
     init() {
         do {
             container = try ModelContainer(for: Recipe.self)
-            // note how we don't have square brackets around Recipe.self - we just aren't listing multiple models for this example (which is optional)
-            // if you set up your relationships properly, Swift pulls in all the models with relationships so you don't have to do it manually
         } catch {
             fatalError("Failed to create ModelContainer for Recipe. If you made a change to the Model, uninstall the app, and restart it from Xcode.")
         }

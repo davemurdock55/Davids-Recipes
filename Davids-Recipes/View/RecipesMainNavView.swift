@@ -28,7 +28,7 @@ struct RecipesMainNavView: View {
     }
     
     private var displayRecipes: [Recipe] {
-        var filteredRecipes = viewModel.filterRecipes(by: filterText ?? Constants.allRecipes)
+        var filteredRecipes = viewModel.filterRecipes(by: filterText ?? "All Recipes")
         
         if !searchText.isEmpty {
             filteredRecipes = filteredRecipes.filter({ $0.ingredients.localizedCaseInsensitiveContains(searchText) })
@@ -42,8 +42,14 @@ struct RecipesMainNavView: View {
             NavigationSplitView {
                 List(selection: $filterText) {
                     Section {
-                        NavigationLink(value: Constants.allRecipes) {
-                            Label(Constants.allRecipes, systemImage: "list.bullet.rectangle")
+                        NavigationLink(
+                            value: "All Recipes"
+//                            destination: recipeList(
+//                                for: viewModel.recipes,
+//                                with: "All Recipes"
+//                            )
+                        ) {
+                            Label("All Recipes", systemImage: "list.bullet.rectangle")
                         }
                         NavigationLink(value: "Favorites") {
                             Label("Favorites", systemImage: "heart")
@@ -95,7 +101,25 @@ struct RecipesMainNavView: View {
                 if let recipe = selectedRecipe {
                     RecipeView(recipe: recipe)
                 } else {
-                    Text("Select a recipe")
+                    VStack(alignment: .center) {
+                        Text("Welcome to David's Recipe App!")
+                            .font(.title)
+                            .multilineTextAlignment(.center)
+                        Text("Please Select a recipe or add a new one to get started")
+                        Button {
+                            showAddRecipeSheet = true
+                        } label: {
+                            Label("Add a Recipe", systemImage: "plus")
+                        }
+                        .padding()
+                        .foregroundStyle(.white)
+                        .background(.accent)
+                        .cornerRadius(Constants.buttonCornerRadius)
+                        .sheet(isPresented: $showAddRecipeSheet) {
+                            RecipeSheetView()
+                        }
+                    }
+                    .padding(Constants.bottomPadding)
                 }
             }
         } else {
@@ -111,19 +135,43 @@ struct RecipesMainNavView: View {
                .padding()
                .foregroundStyle(.white)
                .background(.accent)
-               .cornerRadius(10)
+               .cornerRadius(Constants.buttonCornerRadius)
                .sheet(isPresented: $showAddRecipeSheet) {
                    RecipeSheetView()
                }
            }
-           .padding(5)
+           .padding(Constants.bottomPadding)
        }
     }
     
+    
+//    You can do something like this to list recipes in both places
+//    private func recipeList(for recipes: [Recipe], with title: String) -> some View {
+//        List {
+//            ForEach(recipes) { recipe in
+//                NavigationLink(recipe.title, destination: RecipeView(recipe: recipe))
+//            }
+//        }
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarTrailing) {
+//                EditButton()
+//            }
+//            ToolbarItem {
+//                Button {
+//                    showAddRecipeSheet = true
+//                } label: {
+//                    Label("Add Item", systemImage: "plus")
+//                }
+//            }
+//        }
+//    }
+    
 }
 
+// MARK: - Constants
 private struct Constants {
-    static fileprivate let allRecipes: String = "All Recipes"
+    static fileprivate let buttonCornerRadius: Double = 10
+    static fileprivate let bottomPadding: Double = 5
 }
 
 #Preview {

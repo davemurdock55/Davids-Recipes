@@ -9,26 +9,28 @@ import Foundation
 import SwiftData
 
 @Model
-final class Recipe {
+final class Recipe: ObservableObject {
     var title: String
+    var imageUrl: String
     var author: String
-    var recipeQuote: String
+    var quote: String
     var categories: [String]
-    var ingredients: String // could change this to something else (needs "quantity", "ingredientName", and "note")
-    var instructions: String // could change this to something else (needs "step" and "description")
+    var ingredients: String
+    var instructions: String
     var notes: String
-    var favorited: Bool
+    var isFavorite: Bool
     var lastModified: Date
     
-    init(title: String, author: String, recipeQuote: String, categories: [String], ingredients: String, instructions: String, notes: String, favorited: Bool, lastModified: Date) {
+    init(title: String, imageUrl: String, author: String, quote: String, categories: [String], ingredients: String, instructions: String, notes: String, isFavorite: Bool, lastModified: Date) {
         self.title = title
+        self.imageUrl = imageUrl
         self.author = author
-        self.recipeQuote = recipeQuote
+        self.quote = quote
         self.categories = categories
         self.ingredients = ingredients
         self.instructions = instructions
         self.notes = notes
-        self.favorited = favorited
+        self.isFavorite = isFavorite
         self.lastModified = lastModified
     }
 }

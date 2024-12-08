@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		394BA87A2CFF593C00578FCC /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 394BA8792CFF593C00578FCC /* MarkdownUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		390F81282CEFF27E0084A9AD /* Davids-Recipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Davids-Recipes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				394BA87A2CFF593C00578FCC /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = "Davids-Recipes";
 			packageProductDependencies = (
+				394BA8792CFF593C00578FCC /* MarkdownUI */,
 			);
 			productName = "Davids-Recipes";
 			productReference = 390F81282CEFF27E0084A9AD /* Davids-Recipes.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 390F811F2CEFF27E0084A9AD;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				394BA8782CFF593C00578FCC /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 390F81292CEFF27E0084A9AD /* Products */;
 			projectDirPath = "";
@@ -322,6 +331,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		394BA8782CFF593C00578FCC /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		394BA8792CFF593C00578FCC /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 394BA8782CFF593C00578FCC /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 390F81202CEFF27E0084A9AD /* Project object */;
 }
