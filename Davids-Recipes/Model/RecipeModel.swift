@@ -10,6 +10,7 @@ import SwiftData
 
 @Model
 final class Recipe: ObservableObject {
+    // MARK: - Properties
     var title: String
     var imageUrl: String
     var author: String
@@ -21,6 +22,12 @@ final class Recipe: ObservableObject {
     var isFavorite: Bool
     var lastModified: Date
     
+    // MARK: - Computed Properties
+    var searchKeywords: String {
+        "\(title) \(author) \(quote) \(categories) \(ingredients) \(instructions) \(notes)"
+    }
+    
+    // MARK: - Initialization
     init(title: String, imageUrl: String, author: String, quote: String, categories: [String], ingredients: String, instructions: String, notes: String, isFavorite: Bool, lastModified: Date) {
         self.title = title
         self.imageUrl = imageUrl

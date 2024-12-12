@@ -17,6 +17,7 @@ struct RecipeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                // Looked this up online
                 AsyncImage(url: URL(string: recipe.imageUrl)) { image in
                     image
                         .resizable()
@@ -24,15 +25,18 @@ struct RecipeView: View {
                         .frame(height: Constants.imageFrameHeight)
                         .clipped()
                 } placeholder: {
+                    // looked this up online and got this from Google's Gemeni AI result that popped up
                     ProgressView()
                         .frame(height: Constants.imageFrameHeight)
                 }
                 .padding(.vertical, Constants.standardPadding)
-
-//                Text("\(recipe.title)").font(.title).fontWeight(.bold)
-//                    .padding(.vertical, Constants.standardPadding)
                 
-                Text("\(recipe.author)").font(.title3)
+                Text("\(recipe.title)")
+                    .font(.title).fontWeight(.bold)
+                    .frame(maxWidth: Constants.standardMaxWidth)
+                    .padding(.vertical, Constants.standardPadding)
+                
+                Text("\(recipe.author)").font(.title3).frame(maxWidth: Constants.standardMaxWidth)
                 Text("Last Updated: \(recipe.lastModified, format: Date.FormatStyle(date: .numeric))").font(.subheadline)
                 
                 HStack {
@@ -40,9 +44,12 @@ struct RecipeView: View {
                         TagView(category: category)
                     }
                 }
+                .frame(maxWidth: Constants.standardMaxWidth)
                 .padding(.vertical, Constants.standardPadding)
+                .padding(.horizontal, Constants.standardPadding)
                 
                 Markdown("\(recipe.quote)")
+                    // used the documentation's example code to start building this
                     .markdownBlockStyle(\.blockquote) { configuration in
                         configuration.label
                             .padding()
@@ -53,10 +60,13 @@ struct RecipeView: View {
                             }
                             .background(Color.accent.opacity(Constants.lowOpacity))
                     }
+                    .frame(maxWidth: Constants.standardMaxWidth)
                     .padding(.bottom, Constants.standardPadding)
+                    .padding(.horizontal, Constants.standardPadding)
                 
                 Text("Ingredients").font(.title2).fontWeight(.bold)
                 Markdown("\(recipe.ingredients)")
+                    // used the documentation for these
                     .markdownTableBorderStyle(
                         TableBorderStyle(color: Color.accent)
                     )
@@ -70,17 +80,21 @@ struct RecipeView: View {
                                 )
                             )
                     }
+                    .frame(maxWidth: Constants.standardMaxWidth)
                     .padding(.bottom, Constants.standardPadding)
                     .padding(.horizontal, Constants.standardPadding)
                 
                 Text("Instructions").font(.title2).fontWeight(.bold)
                 Markdown("\(recipe.instructions)")
+                    .frame(maxWidth: Constants.standardMaxWidth)
                     .padding(.bottom, Constants.standardPadding)
+                    .padding(.horizontal, Constants.standardPadding)
                 
                 Text("Notes").font(.title2).fontWeight(.bold)
                 Markdown("\(recipe.notes)")
-                    .frame(width: Constants.notesWidth)
+                    .frame(maxWidth: Constants.standardMaxWidth)
                     .padding(.bottom, Constants.standardPadding)
+                    .padding(.horizontal, Constants.standardPadding)
             }
         }
         .navigationTitle("\(recipe.title)")
@@ -117,5 +131,5 @@ private struct Constants {
     static fileprivate let standardPadding: Double = 10
     static fileprivate let lowOpacity: Double = 0.25
     static fileprivate let quoteLineWidth: Double = 4
-    static fileprivate let notesWidth: Double = 350
+    static fileprivate let standardMaxWidth: Double = 350
 }

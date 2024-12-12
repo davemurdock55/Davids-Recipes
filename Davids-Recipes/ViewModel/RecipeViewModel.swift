@@ -24,7 +24,6 @@ class RecipeViewModel {
     private(set) var recipes: [Recipe] = []
     private(set) var favorites: [Recipe] = []
     private(set) var categories: [String] = []
-    var imageData: Data?
     
     func recipes(for category: String) -> [Recipe] {
         return recipes.filter{
@@ -109,6 +108,7 @@ class RecipeViewModel {
     }
     
     private func setCategories() {
+        // initially had some help from AI to set this up (mostly Set<String>()), but we ended up doing this exact same thing together in class
         var categoriesSet = Set<String>()
         
         recipes.forEach { recipe in

@@ -12,6 +12,7 @@ struct ToggleInput: View {
     @Binding var isOn: Bool
     
     var body: some View {
+        // looked up the exact syntax online again
         Toggle(isOn: $isOn) {
             Text(labelText)
                 .font(.title3)
@@ -49,12 +50,14 @@ struct MultiLineTextInput: View {
         VStack(alignment: .leading) {
             Text(labelText).font(Constants.formLabelFontSize).fontWeight(Constants.formLabelFontWeight)
             ZStack(alignment: .topLeading) {
+                // found out online about TextEditor before we talked about them in class
                 TextEditor(text: $value)
                     .frame(height: Constants.multiLineInputHeight)
                     .padding(Constants.formInputPadding)
                     .background(Constants.formInputBackground)
                     .cornerRadius(Constants.formInputCornerRadius)
                 
+                // Found out online how to do a placeholder for a TextEditor
                 if value.isEmpty {
                     Text(placeholderText)
                         .foregroundColor(.gray)
@@ -97,6 +100,8 @@ struct ListInput: View {
         }
         .padding(.vertical, Constants.formInputPadding)
         
+        // Had some help from AI to intially build out the .append() action
+        // helped me come up with the idea to just append an empty string for the user to add to (or maybe I came up with it, but I forget)
         Button(action: { stringArray.append("") }) {
             HStack {
                 Spacer()

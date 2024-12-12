@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		394BA87A2CFF593C00578FCC /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 394BA8792CFF593C00578FCC /* MarkdownUI */; };
+		39A18E842D0AA7B400EEA7A5 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 39A18E822D0AA7A400EEA7A5 /* readme.md */; };
 		39C5BE4E2D056B3E0048B420 /* resources.txt in Resources */ = {isa = PBXBuildFile; fileRef = 39C5BE4D2D056B370048B420 /* resources.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		390F81282CEFF27E0084A9AD /* Davids-Recipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Davids-Recipes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		39A18E822D0AA7A400EEA7A5 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		39C5BE4D2D056B370048B420 /* resources.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = resources.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -39,6 +41,7 @@
 		390F811F2CEFF27E0084A9AD = {
 			isa = PBXGroup;
 			children = (
+				39A18E822D0AA7A400EEA7A5 /* readme.md */,
 				39C5BE4D2D056B370048B420 /* resources.txt */,
 				390F812A2CEFF27E0084A9AD /* Davids-Recipes */,
 				390F81292CEFF27E0084A9AD /* Products */,
@@ -121,6 +124,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39A18E842D0AA7B400EEA7A5 /* readme.md in Resources */,
 				39C5BE4E2D056B3E0048B420 /* resources.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

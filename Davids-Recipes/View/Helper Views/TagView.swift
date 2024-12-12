@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+// I had AI suggest to me how to make tags as a View and it showed me the novel solution of just using a Text() View, which I thought was pretty cool
 struct TagView: View {
     var category: String
     

@@ -87,7 +87,7 @@ struct RecipeSheetView: View {
                                         """
                     )
                     
-                    // notes (long-string)
+                    // Notes (long-string)
                     MultiLineTextInput(
                         labelText: "Notes",
                         value: $recipeNotes,
@@ -113,7 +113,7 @@ struct RecipeSheetView: View {
                                 updatedRecipe.imageUrl = recipeImageUrl
                                 updatedRecipe.author = recipeAuthor
                                 updatedRecipe.quote = recipeQuote
-                                updatedRecipe.categories = recipeCategories.map { $0.capitalized }
+                                updatedRecipe.categories = recipeCategories.map { $0.capitalized } // looked up the exact syntax again for Capitalized/title case
                                 updatedRecipe.ingredients = recipeIngredients
                                 updatedRecipe.instructions = recipeInstructions
                                 updatedRecipe.notes = recipeNotes
@@ -144,6 +144,7 @@ struct RecipeSheetView: View {
                         }
                     }
                 }
+                // I think I had AI suggest to me to use onAppear here before we covered it in class together
                 .onAppear {
                     if let recipe = editingRecipe {
                         recipeIsFavorite = recipe.isFavorite

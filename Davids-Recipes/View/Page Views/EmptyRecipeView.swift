@@ -15,7 +15,7 @@ struct EmptyRecipeView: View {
         VStack(alignment: .center) {
             Text("Welcome to David's Recipe App!")
                 .font(.title)
-                .multilineTextAlignment(.center)
+                .multilineTextAlignment(.center) // looked this up online (multiTextAlignment)
             
             if noRecipesAtAll == false {
                 Text("Please Select a recipe or add a new one to get started")
